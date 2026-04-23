@@ -826,7 +826,7 @@
 // ═══════════════════════════════════════════
 let CONFIG = {
   scriptUrl: localStorage.getItem('bq_url') || 'https://script.google.com/macros/s/AKfycbziye7lMVCnmo6pro8FEONOCo-ZJKwquEAZdvW4cxlPM2_ufxQG1t3wK1jFMkjDv8I/exec',
-  encKey: localStorage.getItem('bq_key') || ''
+  encKey: localStorage.getItem('bq_key') || '1qstxpkq8r79'
 };
 
 // ═══════════════════════════════════════════
@@ -905,10 +905,6 @@ async function submitQuote() {
   if (!name) { showError('Please enter the person\'s name.'); return; }
   if (!CONFIG.scriptUrl) {
     showError('The app hasn\'t been configured yet. Ask the organizer to complete the setup first.');
-    return;
-  }
-  if (!CONFIG.encKey) {
-    showError('No encryption key set. Please complete setup first.');
     return;
   }
 

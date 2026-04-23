@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board Quotes 🎓</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf6ee;
+    --ink: #1a1410;
+    --gold: #c9933a;
+    --gold-light: #f0d9a8;
+    --red: #c0392b;
+    --sage: #5a7a5c;
+    --paper: #f5ede0;
+    --shadow: rgba(26,20,16,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(201,147,58,0.06) 28px, rgba(201,147,58,0.06) 29px),
+      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(201,147,58,0.04) 28px, rgba(201,147,58,0.04) 29px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; }
+
+  /* ── LANDING ── */
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.3rem 0.9rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  h1.hero {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.05;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1.hero em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #6b5e52;
+    font-weight: 300;
+    max-width: 360px;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.8rem 2rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-primary:hover { background: #2d2520; transform: translateY(-1px); box-shadow: 0 4px 16px var(--shadow); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+  .divider-line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 2rem auto;
+    animation: fadeUp 0.6s 0.25s ease both;
+  }
+
+  /* ── SUBMIT PAGE ── */
+  #submit {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .card {
+    background: var(--paper);
+    border: 1px solid rgba(201,147,58,0.25);
+    border-radius: 4px;
+    padding: 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 8px 40px var(--shadow), 4px 4px 0 var(--gold-light);
+    animation: cardIn 0.5s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) rotate(-0.5deg); }
+    to { opacity: 1; transform: translateY(0) rotate(0); }
+  }
+
+  .card-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px dashed rgba(201,147,58,0.4);
+  }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: #6b5e52;
+    margin-top: 0.4rem;
+    line-height: 1.5;
+  }
+
+  .field {
+    margin-bottom: 1.4rem;
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #5a4e44;
+    margin-bottom: 0.5rem;
+  }
+
+  .field textarea, .field input[type="text"], .field input[type="password"] {
+    width: 100%;
+    background: var(--cream);
+    border: 1.5px solid rgba(26,20,16,0.15);
+    border-radius: 3px;
+    padding: 0.75rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    resize: vertical;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  .field textarea:focus, .field input:focus {
+    border-color: var(--gold);
+  }
+
+  .field textarea { min-height: 100px; }
+
+  .quote-preview {
+    background: white;
+    border-left: 3px solid var(--gold);
+    padding: 0.8rem 1rem;
+    margin-top: 0.6rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: #3a2e26;
+    min-height: 50px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .privacy-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: rgba(90,122,92,0.08);
+    border: 1px solid rgba(90,122,92,0.2);
+    border-radius: 3px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.4rem;
+    font-size: 0.8rem;
+    color: var(--sage);
+    line-height: 1.5;
+  }
+
+  .privacy-note .icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .btn-full { width: 100%; padding: 0.9rem; font-size: 1rem; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: #6b5e52;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* ── SUCCESS ── */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .success-msg.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-msg h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .success-msg p { font-size: 0.9rem; color: #6b5e52; margin-bottom: 1.5rem; }
+
+  /* ── HOST PAGE ── */
+  #host {
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .host-header {
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .host-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .host-title span { color: var(--gold); }
+
+  .key-bar {
+    background: var(--paper);
+    border: 1px solid rgba(201,147,58,0.3);
+    border-radius: 3px;
+    padding: 1.2rem 1.5rem;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+
+  .key-bar .field { margin: 0; flex: 1; min-width: 200px; }
+  .key-bar .field label { margin-bottom: 0.4rem; }
+
+  .quotes-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .quote-card {
+    background: var(--paper);
+    border: 1px solid rgba(201,147,58,0.2);
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: 2px 2px 0 var(--gold-light);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-card:hover { transform: translateY(-2px); box-shadow: 2px 6px 20px var(--shadow); }
+
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    color: var(--gold-light);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-person {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+
+  .quote-person.locked {
+    background: var(--ink);
+    color: var(--ink);
+    cursor: default;
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  .quote-person.revealed {
+    background: var(--gold);
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .quote-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #b0a090;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.7rem;
+  }
+
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #8a7a6a;
+  }
+
+  .empty-state h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── SETUP PAGE ── */
+  #setup {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .setup-steps {
+    list-style: none;
+    margin: 1.5rem 0;
+  }
+
+  .setup-steps li {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #3a2e26;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  .code-block {
+    background: #1a1410;
+    color: #c9933a;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 1rem 1.2rem;
+    border-radius: 3px;
+    margin: 1rem 0;
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+
+  .code-block .comment { color: #6b5e52; }
+  .code-block .key-word { color: #f5ede0; }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1.5px solid rgba(201,147,58,0.3);
+  }
+
+  .tab {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1.5px;
+    color: #8a7a6a;
+    transition: all 0.15s;
+  }
+
+  .tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .copy-btn {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.7rem;
+    background: rgba(201,147,58,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    border-radius: 2px;
+    cursor: pointer;
+    float: right;
+    margin-top: -0.3rem;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--gold); color: white; }
+
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(201,147,58,0.12);
+    color: var(--gold);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-bar {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: #8a7a6a;
+    letter-spacing: 0.05em;
+    margin-top: 0.6rem;
+  }
+
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 0.4rem; }
+  .dot.green { background: var(--sage); }
+  .dot.red { background: var(--red); }
+  .dot.yellow { background: var(--gold); }
+
+  .reveal-all-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.5rem 1.2rem;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .reveal-all-btn:hover { background: #a93226; }
+
+  /* Mobile tweaks */
+  @media (max-width: 500px) {
+    .card { padding: 1.5rem; }
+    .btn-row { flex-direction: column; align-items: stretch; }
+    .btn { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ LANDING ══════════════════ -->
+<div id="landing" class="page active">
+  <div class="badge">🎓 Board Social · Last Func Ever</div>
+  <h1 class="hero">Things We<br><em>Actually</em> Said</h1>
+  <div class="divider-line"></div>
+  <p class="subtitle">Submit a quote. Guess who said it. Cringe together one last time.</p>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="showPage('submit')">Submit a Quote</button>
+    <button class="btn btn-secondary" onclick="showPage('host')">Host View 🔐</button>
+  </div>
+  <p style="margin-top:2.5rem; font-size:0.72rem; color:#b0a090; font-family:'DM Mono',monospace; animation: fadeUp 0.6s 0.4s ease both; opacity:0; animation-fill-mode:both;">
+    Names are encrypted — even the organizer can't see them until game time.
+  </p>
+</div>
+
+<!-- ══════════════════ SUBMIT ══════════════════ -->
+<div id="submit" class="page">
+  <div style="max-width:520px; width:100%; margin:0 auto; padding-top: 1.5rem;">
+    <span class="back-link" onclick="showPage('landing')">← Back</span>
+
+    <div class="card">
+      <!-- Form view -->
+      <div id="submitForm">
+        <div class="card-header">
+          <div class="card-label">Anonymous Submission</div>
+          <div class="card-title">Add a Quote</div>
+          <div class="card-desc">The quote is stored as-is. The person's name is encrypted — nobody can read it until the game.</div>
+        </div>
+
+        <div class="field">
+          <label>The Quote ✍️</label>
+          <textarea id="quoteInput" placeholder="What did they say? Be as specific as you remember..." oninput="updatePreview()"></textarea>
+          <div class="quote-preview" id="quotePreview" style="display:none"></div>
+        </div>
+
+        <div class="field">
+          <label>Who Said It 🤫</label>
+          <input type="text" id="nameInput" placeholder="Their name (will be encrypted instantly)" />
+        </div>
+
+        <div class="privacy-note">
+          <span class="icon">🔒</span>
+          <span>The name gets encrypted in your browser using AES-256 before anything is stored. The organizer only sees a string of gibberish — your entry is safe until game time.</span>
+        </div>
+
+        <div id="submitError" style="display:none; color:var(--red); font-size:0.82rem; margin-bottom:1rem; padding: 0.6rem; background: rgba(192,57,43,0.07); border-radius:3px;"></div>
+
+        <button class="btn btn-primary btn-full" onclick="submitQuote()">Submit Quote 🔐</button>
+
+        <div class="status-bar" style="margin-top: 1rem;" id="submitStatus">
+          <span class="dot yellow"></span> Ready to submit
+        </div>
+      </div>
+
+      <!-- Success view -->
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">🎉</div>
+        <h2>Quote submitted!</h2>
+        <p>The name is locked away. See you at the social!</p>
+        <button class="btn btn-primary" onclick="resetForm()">Add Another</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ HOST ══════════════════ -->
+<div id="host" class="page">
+  <div class="host-header">
+    <div>
+      <span class="back-link" onclick="showPage('landing')" style="margin-bottom:0.3rem; display:inline-flex;">← Back</span>
+      <div class="host-title">Host View <span>🔐</span></div>
+    </div>
+    <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap;">
+      <button class="reveal-all-btn" onclick="revealAll()" id="revealAllBtn" style="display:none">Reveal All Names</button>
+      <button class="btn btn-secondary" onclick="showPage('setup')" style="font-size:0.8rem; padding:0.5rem 1rem;">Setup Guide</button>
+    </div>
+  </div>
+
+  <div class="key-bar">
+    <div class="field">
+      <label>Decryption Key</label>
+      <input type="password" id="hostKey" placeholder="Enter the secret key to reveal names..." oninput="onKeyChange()" />
+    </div>
+    <button class="btn btn-primary" onclick="loadAndDecrypt()" style="white-space:nowrap; flex-shrink:0; margin-bottom:0;">Load Quotes</button>
+  </div>
+
+  <div class="quotes-grid" id="quotesGrid">
+    <div class="empty-state">
+      <h3>No quotes loaded yet</h3>
+      <p>Enter the decryption key above and click Load Quotes.<br>Names stay hidden until game time! 🎭</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SETUP ══════════════════ -->
+<div id="setup" class="page">
+  <div style="max-width:600px; width:100%; margin:0 auto; padding: 1.5rem 0;">
+    <span class="back-link" onclick="showPage('landing')">← Back</span>
+
+    <div class="card" style="max-width:600px;">
+      <div class="card-header">
+        <div class="card-label">One-time Setup · ~15 mins</div>
+        <div class="card-title">Connect to Google Sheets</div>
+        <div class="card-desc">This app uses a Google Apps Script as a tiny backend. Free, no server, no database.</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(0)">Step 1 · Sheet</div>
+        <div class="tab" onclick="switchTab(1)">Step 2 · Script</div>
+        <div class="tab" onclick="switchTab(2)">Step 3 · Configure</div>
+      </div>
+
+      <div class="tab-content active" id="tab0">
+        <ul class="setup-steps">
+          <li><span class="step-num">1</span> Go to <strong>sheets.google.com</strong> and create a new spreadsheet</li>
+          <li><span class="step-num">2</span> Name it something like <em>"Board Quotes 2025"</em></li>
+          <li><span class="step-num">3</span> In row 1, add these headers:<br>
+            <div class="code-block" style="margin-top:0.5rem">A1: timestamp &nbsp; B1: quote &nbsp; C1: encryptedName</div>
+          </li>
+          <li><span class="step-num">4</span> Copy the spreadsheet ID from the URL:<br>
+            <div class="code-block" style="margin-top:0.5rem; word-break:break-all">https://docs.google.com/spreadsheets/d/<span style="color:#f5ede0">YOUR_ID_IS_HERE</span>/edit</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tab-content" id="tab1">
+        <ul class="setup-steps">
+          <li><span class="step-num">1</span> In your spreadsheet, go to <strong>Extensions → Apps Script</strong></li>
+          <li><span class="step-num">2</span> Delete any existing code and paste this:
+            <button class="copy-btn" onclick="copyScript()">Copy</button>
+            <div class="code-block" id="scriptCode" style="margin-top:0.5rem; clear:both">
+<span class="comment">// Replace with your actual spreadsheet ID</span><br>
+<span class="key-word">const</span> SHEET_ID = <span style="color:#c9e88a">"PASTE_YOUR_SHEET_ID_HERE"</span>;<br><br>
+<span class="key-word">function</span> doPost(e) {<br>
+&nbsp;&nbsp;<span class="key-word">const</span> data = JSON.parse(e.postData.contents);<br>
+&nbsp;&nbsp;<span class="key-word">const</span> sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();<br>
+&nbsp;&nbsp;sheet.appendRow([<span class="key-word">new</span> Date(), data.quote, data.encryptedName]);<br>
+&nbsp;&nbsp;<span class="key-word">return</span> ContentService<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.createTextOutput(JSON.stringify({ok: <span class="key-word">true</span>}))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.setMimeType(ContentService.MimeType.JSON);<br>
+}<br><br>
+<span class="key-word">function</span> doGet(e) {<br>
+&nbsp;&nbsp;<span class="key-word">const</span> sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();<br>
+&nbsp;&nbsp;<span class="key-word">const</span> rows = sheet.getDataRange().getValues().slice(1);<br>
+&nbsp;&nbsp;<span class="key-word">const</span> data = rows.map(r => ({quote: r[1], encryptedName: r[2]}));<br>
+&nbsp;&nbsp;<span class="key-word">return</span> ContentService<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.createTextOutput(JSON.stringify(data))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.setMimeType(ContentService.MimeType.JSON);<br>
+}
+            </div>
+          </li>
+          <li><span class="step-num">3</span> Click <strong>Deploy → New deployment</strong></li>
+          <li><span class="step-num">4</span> Choose type: <span class="tag">Web app</span>, set "Who has access" to <span class="tag">Anyone</span></li>
+          <li><span class="step-num">5</span> Click Deploy and <strong>copy the Web App URL</strong></li>
+        </ul>
+      </div>
+
+      <div class="tab-content" id="tab2">
+        <ul class="setup-steps">
+          <li><span class="step-num">1</span> Paste your Apps Script Web App URL here:</li>
+        </ul>
+        <div class="field" style="margin: 0 0 1.2rem 2.2rem;">
+          <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveConfig()" />
+        </div>
+        <ul class="setup-steps">
+          <li><span class="step-num">2</span> Choose a secret encryption key and give it to a <strong>trusted friend</strong> (not yourself):<br>
+            <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center;">
+              <input type="text" id="encKey" placeholder="e.g. graduation2025" style="flex:1; background:var(--cream); border:1.5px solid rgba(26,20,16,0.15); border-radius:3px; padding:0.6rem 0.8rem; font-family:'DM Mono',monospace; font-size:0.85rem; outline:none;" oninput="saveConfig()" />
+              <button class="btn btn-secondary" style="font-size:0.8rem; padding:0.55rem 1rem; flex-shrink:0" onclick="generateKey()">Generate</button>
+            </div>
+            <div style="font-size:0.75rem; color:#8a7a6a; margin-top:0.4rem;">⚠️ Give this key to someone else. You shouldn't know it until the game!</div>
+          </li>
+          <li><span class="step-num">3</span> Save config and share the <strong>Submit URL</strong> with your board members</li>
+        </ul>
+        <button class="btn btn-primary" onclick="saveConfigAndTest()" style="margin-top:0.5rem;">Save & Test Connection</button>
+        <div class="status-bar" style="margin-top:0.8rem;" id="configStatus">
+          <span class="dot yellow"></span> Not configured
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONFIG — filled in via Setup page
+// ═══════════════════════════════════════════
+let CONFIG = {
+  scriptUrl: localStorage.getItem('bq_url') || '',
+  encKey: localStorage.getItem('bq_key') || ''
+};
+
+// ═══════════════════════════════════════════
+// ENCRYPTION (AES-GCM via Web Crypto)
+// ═══════════════════════════════════════════
+async function deriveKey(password) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: enc.encode('boardsocial2025'), iterations: 100000, hash: 'SHA-256' },
+    keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+  );
+}
+
+async function encryptName(name, password) {
+  const key = await deriveKey(password);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(name));
+  // Combine iv + ciphertext → base64
+  const combined = new Uint8Array(iv.byteLength + ciphertext.byteLength);
+  combined.set(iv, 0);
+  combined.set(new Uint8Array(ciphertext), iv.byteLength);
+  return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptName(encoded, password) {
+  try {
+    const key = await deriveKey(password);
+    const combined = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+    const iv = combined.slice(0, 12);
+    const ciphertext = combined.slice(12);
+    const dec = new TextDecoder();
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+    return dec.decode(plain);
+  } catch {
+    return null; // Wrong key
+  }
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'host') refreshHostView();
+}
+
+// ═══════════════════════════════════════════
+// SUBMIT
+// ═══════════════════════════════════════════
+function updatePreview() {
+  const val = document.getElementById('quoteInput').value.trim();
+  const preview = document.getElementById('quotePreview');
+  if (val) {
+    preview.style.display = 'block';
+    preview.textContent = '"' + val + '"';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+async function submitQuote() {
+  const quote = document.getElementById('quoteInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  const errEl = document.getElementById('submitError');
+  const statusEl = document.getElementById('submitStatus');
+
+  errEl.style.display = 'none';
+
+  if (!quote) { showError('Please enter a quote!'); return; }
+  if (!name) { showError('Please enter the person\'s name.'); return; }
+  if (!CONFIG.scriptUrl) {
+    showError('The app hasn\'t been configured yet. Ask the organizer to complete the setup first.');
+    return;
+  }
+  if (!CONFIG.encKey) {
+    showError('No encryption key set. Please complete setup first.');
+    return;
+  }
+
+  statusEl.innerHTML = '<span class="dot yellow"></span> Encrypting name...';
+
+  try {
+    const encryptedName = await encryptName(name, CONFIG.encKey);
+    statusEl.innerHTML = '<span class="dot yellow"></span> Submitting...';
+
+    const res = await fetch(CONFIG.scriptUrl, {
+      method: 'POST',
+      body: JSON.stringify({ quote, encryptedName }),
+      headers: { 'Content-Type': 'text/plain' } // Apps Script CORS workaround
+    });
+
+    if (!res.ok) throw new Error('Network error');
+
+    statusEl.innerHTML = '<span class="dot green"></span> Submitted!';
+    document.getElementById('submitForm').style.display = 'none';
+    document.getElementById('successMsg').classList.add('show');
+
+  } catch (err) {
+    showError('Something went wrong. Check your internet connection and try again.');
+    statusEl.innerHTML = '<span class="dot red"></span> Failed';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('submitError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function resetForm() {
+  document.getElementById('quoteInput').value = '';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('quotePreview').style.display = 'none';
+  document.getElementById('submitError').style.display = 'none';
+  document.getElementById('submitForm').style.display = 'block';
+  document.getElementById('successMsg').classList.remove('show');
+  document.getElementById('submitStatus').innerHTML = '<span class="dot yellow"></span> Ready to submit';
+}
+
+// ═══════════════════════════════════════════
+// HOST VIEW
+// ═══════════════════════════════════════════
+let loadedQuotes = [];
+
+function onKeyChange() {
+  // reset revealed state when key changes
+  document.querySelectorAll('.quote-person').forEach(el => {
+    el.classList.add('locked');
+    el.classList.remove('revealed');
+    el.textContent = '██████';
+  });
+}
+
+async function loadAndDecrypt() {
+  const key = document.getElementById('hostKey').value;
+  const grid = document.getElementById('quotesGrid');
+
+  if (!CONFIG.scriptUrl) {
+    grid.innerHTML = '<div class="empty-state"><h3>Not configured</h3><p>Go to Setup Guide to connect your Google Sheet first.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = '<div class="empty-state"><h3>Loading...</h3><p>Fetching quotes from the sheet 📄</p></div>';
+
+  try {
+    const res = await fetch(CONFIG.scriptUrl);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    loadedQuotes = data.filter(q => q.quote && q.encryptedName);
+  } catch {
+    grid.innerHTML = '<div class="empty-state"><h3>Couldn\'t load quotes</h3><p>Check your internet connection and that the script URL is correct in Setup.</p></div>';
+    return;
+  }
+
+  if (loadedQuotes.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><h3>No quotes yet! 👀</h3><p>Share the submission link with your board members.</p></div>';
+    return;
+  }
+
+  // Render cards
+  grid.innerHTML = '';
+  for (let i = 0; i < loadedQuotes.length; i++) {
+    const q = loadedQuotes[i];
+    const card = document.createElement('div');
+    card.className = 'quote-card';
+    card.innerHTML = `
+      <div class="quote-num">#${String(i+1).padStart(2,'0')}</div>
+      <div class="quote-text">${escapeHtml(q.quote)}</div>
+      <div class="quote-person locked" id="person-${i}" data-enc="${escapeHtml(q.encryptedName)}">██████</div>
+    `;
+    grid.appendChild(card);
+  }
+
+  document.getElementById('revealAllBtn').style.display = 'inline-block';
+
+  // If a key is already entered, decrypt immediately
+  if (key) await decryptAll(key);
+}
+
+async function decryptAll(key) {
+  const personEls = document.querySelectorAll('.quote-person');
+  for (const el of personEls) {
+    const enc = el.getAttribute('data-enc');
+    const name = await decryptName(enc, key);
+    if (name) {
+      el.textContent = name;
+      el.classList.remove('locked');
+      el.classList.add('revealed');
+    } else {
+      el.textContent = '🔑 Wrong key';
+    }
+  }
+}
+
+async function revealAll() {
+  const key = document.getElementById('hostKey').value;
+  if (!key) {
+    alert('Enter the decryption key first!');
+    return;
+  }
+  await decryptAll(key);
+}
+
+function refreshHostView() {
+  // no-op on first load; quotes load on button press
+}
+
+// ═══════════════════════════════════════════
+// SETUP
+// ═══════════════════════════════════════════
+function switchTab(idx) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-content').forEach((t, i) => t.classList.toggle('active', i === idx));
+}
+
+function saveConfig() {
+  const url = document.getElementById('scriptUrl').value.trim();
+  const key = document.getElementById('encKey').value.trim();
+  if (url) { CONFIG.scriptUrl = url; localStorage.setItem('bq_url', url); }
+  if (key) { CONFIG.encKey = key; localStorage.setItem('bq_key', key); }
+}
+
+function generateKey() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const key = Array.from(crypto.getRandomValues(new Uint8Array(12)))
+    .map(b => chars[b % chars.length]).join('');
+  document.getElementById('encKey').value = key;
+  saveConfig();
+}
+
+async function saveConfigAndTest() {
+  saveConfig();
+  const statusEl = document.getElementById('configStatus');
+  if (!CONFIG.scriptUrl) {
+    statusEl.innerHTML = '<span class="dot red"></span> No URL entered';
+    return;
+  }
+  statusEl.innerHTML = '<span class="dot yellow"></span> Testing connection...';
+  try {
+    const res = await fetch(CONFIG.scriptUrl);
+    if (!res.ok) throw new Error();
+    statusEl.innerHTML = '<span class="dot green"></span> Connected! Config saved ✓';
+  } catch {
+    statusEl.innerHTML = '<span class="dot red"></span> Could not reach the script URL — double-check it';
+  }
+}
+
+// Load saved config into setup fields on first render
+window.addEventListener('DOMContentLoaded', () => {
+  const urlEl = document.getElementById('scriptUrl');
+  const keyEl = document.getElementById('encKey');
+  if (urlEl && CONFIG.scriptUrl) urlEl.value = CONFIG.scriptUrl;
+  if (keyEl && CONFIG.encKey) keyEl.value = CONFIG.encKey;
+});
+
+function copyScript() {
+  const el = document.getElementById('scriptCode');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
